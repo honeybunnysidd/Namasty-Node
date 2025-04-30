@@ -1,0 +1,18 @@
+//Output
+
+Asynchronous execution
+file data: This is the  File data.
+This will execute only after file read completes (readFileSync)
+Multiplication result is :5984654
+file data: This is the  File data.
+Fetched data successfully
+setTimeout called after 5 seconds
+
+//Blocking.js Output
+
+Blocking execution
+Block rest code / Main Thread
+First key is generated
+Multiplication result is : 4654654
+Call me right now
+Second key is generated
