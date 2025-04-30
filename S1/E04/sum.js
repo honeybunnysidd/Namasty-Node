@@ -10,5 +10,5 @@ function substract(a, b) {
 }
 
 //By default module protects variable and function
-//so we do it intentionally
+//so we do it intentionally.
 module.exports = { sum, substract };
