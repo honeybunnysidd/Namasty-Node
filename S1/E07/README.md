@@ -4,40 +4,65 @@ Learn differences between synchronous and asynchronous code.
 
 ---
 
-## 📜 Description of Files
+## 📜 Description of Scripts
 
-### `async.js`
+### ✅ `async.js`
 
-- Shows how Node.js handles:
-  - Asynchronous HTTP requests using `https.get()`
-  - File reading using `fs.readFile()`
-  - Delayed execution with `setTimeout`
-- Also includes a synchronous read using `fs.readFileSync()` for contrast.
+Demonstrates:
 
-### `sync.js`
+- **Asynchronous operations**: `fs.readFile`, `https.get`, `setTimeout`
+- **Synchronous operation**: `fs.readFileSync`
+- Mixes both blocking and non-blocking code for comparison.
 
-- Contains blocking code using `fs.readFileSync()` and synchronous functions.
-- Demonstrates how synchronous operations block further execution.
+### ✅ `blocking.js`
 
-### `blocking.js`
+Demonstrates:
 
-- You can use this file to experiment further with other blocking patterns (e.g., CPU-bound tasks).
+- **Blocking function**: `crypto.pbkdf2Sync()` freezes main thread
+- **Non-blocking version**: `crypto.pbkdf2()` uses libuv threadpool
+- Event loop behavior with `setTimeout(0)`
 
-### `file.txt`
+### ✅ `setTimeout.js`
 
-- Sample file content used by both `async.js` and `sync.js`.
+Demonstrates:
 
-### `output.txt`
+- Delayed execution with `setTimeout(0)` and `setTimeout(3000)`
+- Shows how JavaScript's **event loop** and **call stack** behave
 
-- Can be used to write outputs from any script if needed.
+### ✅ `sync.js`
+
+Demonstrates:
+
+- Simple synchronous operations
+- A pure execution path with no asynchronous logic
 
 ---
 
-## 🏃‍♂️ How to Run
+## 📂 Input Files
 
-Make sure you have [Node.js](https://nodejs.org/) installed.
+- **file.txt** – Contains sample text used for reading in `async.js`.
+
+---
+
+## 📄 Output Reference (`output.txt`)
+
+Contains real sample output logs of running:
+
+- `async.js`
+- `blocking.js`
+- `setTimeout.js`
+
+This helps compare **actual output order** from different types of functions.
+
+---
+
+## 🏃 How to Run
+
+Make sure Node.js is installed:
 
 ```bash
 node async.js
+node blocking.js
+node setTimeout.js
 node sync.js
 ```

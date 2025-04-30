@@ -16,3 +16,10 @@ First key is generated
 Multiplication result is : 4654654
 Call me right now
 Second key is generated
+
+//setTimeout.js Output
+
+SetTimeout execution
+Multiplication result is : 4685454
+Call me right now
+Call me after 3 seconds
