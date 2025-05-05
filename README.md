@@ -2,6 +2,8 @@
 
 - In Season 01 (Namaste_Nodejs), we will explore Node.js in depth and understand how the whole ecosystem works. We will see how JS Engine and libuv makes Node.js even more powerful.
 
+- In Season 02 (DevTinder), we will build real world project and explore Express.js and MongoDB while building everything right from scratch.
+
 ## Monolith vs MicroServices
 
 > **Monolith** - Single Server (Frontend, Backend, Admin, Dashboard, Emails, Analytics)
@@ -26,9 +28,9 @@
 
 ## Waterfall Model (SDLC - Software Development Life Cycle)
 
-1. **Requirements** (Project Manager + Designer) \
-2. .......└── **Design** (Senior Engineer, Engineering Manager)\
-3. ...............└── **Development** (SDE1, SDE2 - Software Development Engineer)\
-4. .........................└── **Testing** (SDET - Software Development Engineer in Test)\
-5. ..................................└── **Deployment** (Dev Team, DevOps)\
+1. **Requirements** (Project Manager + Designer)
+2. .......└── **Design** (Senior Engineer, Engineering Manager)
+3. ...............└── **Development** (SDE1, SDE2 - Software Development Engineer)
+4. .........................└── **Testing** (SDET - Software Development Engineer in Test)
+5. ..................................└── **Deployment** (Dev Team, DevOps)
 6. ............................................└── **Maintainance** (Maintainers)
