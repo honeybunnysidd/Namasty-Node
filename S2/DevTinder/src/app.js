@@ -1,6 +1,8 @@
 const express = require("express");
 const { connectDB } = require("./config/database");
 const User = require("./models/user");
+const { validateSignUpData } = require("./utils/validation");
+const bcrypt = require("bcrypt");
 
 const app = express();
 
@@ -23,32 +25,48 @@ app.get("/user", async (req, res) => {
 
 //Add the user in the database
 app.post("/user", async (req, res) => {
-  const userKeys = Object.keys(req.body); //return array
-  const user = new User(req.body);
-
   try {
-    const allowedFields = [
-      "firstName",
-      "lastName",
-      "emailId",
-      "password",
-      "age",
-      "gender",
-      "photoUrl",
-    ];
+    //Validation of data
+    validateSignUpData(req);
 
-    const isValid = userKeys.every((key) => {
-      return allowedFields.includes(key);
+    const { firstName, lastName, emailId, password } = req.body;
+
+    //Encrypt the password
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: passwordHash,
     });
-    if (!isValid) {
-      throw new Error("Not allowed to add user");
-    } else {
-      await user.save();
-      res.send("User added Successfully");
-    }
+
+    await user.save();
+    res.send("User added Successfully");
   } catch (err) {
     console.log(err.message);
     res.status(400).send("Error : " + err);
+  }
+});
+
+//login user
+app.post("/login", async (req, res) => {
+  const { emailId, password } = req.body;
+  try {
+    const user = await User.findOne({ emailId: emailId });
+    if (!user) {
+      throw new Error("Invalid Credentails");
+    } else {
+      const isValidPassword = await bcrypt.compare(password, user.password);
+
+      if (!isValidPassword) {
+        throw new Error("Password incorrect");
+      } else {
+        res.send("Login Successfully");
+      }
+    }
+  } catch (err) {
+    res.status(400).send("Error : " + err.message);
   }
 });
 
