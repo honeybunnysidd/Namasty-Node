@@ -22,14 +22,33 @@ app.get("/user", async (req, res) => {
 });
 
 //Add the user in the database
-app.post("/signup", async (req, res) => {
+app.post("/user", async (req, res) => {
+  const userKeys = Object.keys(req.body); //return array
   const user = new User(req.body);
-  console.log(req.body);
+
   try {
-    await user.save();
-    res.send("User Added Successfully");
+    const allowedFields = [
+      "firstName",
+      "lastName",
+      "emailId",
+      "password",
+      "age",
+      "gender",
+      "photoUrl",
+    ];
+
+    const isValid = userKeys.every((key) => {
+      return allowedFields.includes(key);
+    });
+    if (!isValid) {
+      throw new Error("Not allowed to add user");
+    } else {
+      await user.save();
+      res.send("User added Successfully");
+    }
   } catch (err) {
-    res.status(401).send("Error occured");
+    console.log(err.message);
+    res.status(400).send("Error : " + err);
   }
 });
 
@@ -47,12 +66,14 @@ app.delete("/user", async (req, res) => {
 
 //Update the data in the database
 app.patch("/user", async (req, res) => {
-  const userId = req.body.userId;
+  const id = req.body.id;
   try {
     const data = await User.findByIdAndUpdate(
-      userId,
-      { firstName: "Siddhartha" },
-      { new: true }
+      id,
+      {
+        photoUrl: "https://sidd.png",
+      },
+      { new: true, runValidators: true }
     );
     console.log(data);
     res.send("Data updated successfully");
