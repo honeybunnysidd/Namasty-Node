@@ -3,10 +3,14 @@ const { connectDB } = require("./config/database");
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth");
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 //Read the user from the database
 app.get("/user", async (req, res) => {
@@ -62,11 +66,29 @@ app.post("/login", async (req, res) => {
       if (!isValidPassword) {
         throw new Error("Password incorrect");
       } else {
+        //Create JWt token
+        const token = await jwt.sign(
+          { _id: user._id },
+          "blahblah",
+          { expiresIn: "1d" } //Secret Code
+        );
+        //Add the token to cookie and send the response back to the user
+        res.cookie("token", token);
         res.send("Login Successfully");
       }
     }
   } catch (err) {
     res.status(400).send("Error : " + err.message);
+  }
+});
+
+//Get the profile
+app.get("/profile", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    res.send(user);
+  } catch (err) {
+    res.status(400).send("Error: " + err.message);
   }
 });
 
@@ -99,6 +121,17 @@ app.patch("/user", async (req, res) => {
     res.status(404).send("Something went wrong");
   }
 });
+
+//Send connection request
+app.post("/sendConnection", userAuth, (req, res) => {
+  try {
+    const user = req.user;
+    res.send(user.firstName + " sent the request!");
+  } catch (err) {
+    res.status(400).send("Error : " + err.message);
+  }
+});
+
 //DataBase Connection
 connectDB()
   .then(() => {
