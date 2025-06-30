@@ -14,6 +14,10 @@ app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 
+app.use("/", (req, res) => {
+  res.status(404).send("Page not found");
+});
+
 //DataBase Connection
 connectDB()
   .then(() => {
