@@ -48,7 +48,7 @@ authRouter.post("/login", async (req, res) => {
         //Creating JWT token
         const token = await jwt.sign({ _id: user._id }, "secretCode", {
           expiresIn: "1d",
-        }); // Client JS access nahi kar sakta
+        }); // Client JS access nahi kar sakta(use httpOnly : true)
 
         //Add the token into cookies
         res.cookie("token", token, { httpOnly: true }); //httpOnly Client JS access nahi kar sakta
