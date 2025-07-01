@@ -1,6 +1,7 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const User = require("../models/user");
+const { validateEditProfileData } = require("../utils/validation");
 
 const profileRouter = express.Router();
 
@@ -18,15 +19,19 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
 //Update the profile
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   try {
-    const updateUser = req.body;
-    const { _id } = req.user;
+    if (!validateEditProfileData(req)) {
+      throw new Error("Not allowed to update the user's fields");
+    }
 
-    await User.findByIdAndUpdate(
-      _id,
-      { updateUser },
-      { runValidators: true, new: true }
-    );
-    res.send("Id : " + _id);
+    const user = req.user;
+
+    Object.keys(req.body).forEach((key) => (user[key] = req.body[key]));
+
+    await User.findByIdAndUpdate(user._id, user, {
+      runValidators: true,
+      new: true,
+    });
+    res.send(user.firstName + " your profile has been updated successfully");
   } catch (err) {
     res.status(400).send("Error : " + err.message);
   }
