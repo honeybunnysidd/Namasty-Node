@@ -22,7 +22,7 @@ requestRouter.post(
       if (!allowedStatus.includes(status)) {
         return res
           .status(400)
-          .json({ message: "Invalid staus type : " + status });
+          .json({ message: "Invalid status type : " + status });
       }
 
       //handle self request - not allowed
@@ -60,6 +60,42 @@ requestRouter.post(
       });
     } catch (err) {
       res.status(400).send("Error : " + err.message);
+    }
+  }
+);
+
+//Review request either accepted or rejected
+requestRouter.post(
+  "/request/review/:status/:requestId",
+  userAuth,
+  async (req, res) => {
+    try {
+      const { status, requestId } = req.params;
+      const loggedUser = req.user;
+
+      //Validate the status (reject or accept only)
+      const allowedStatus = ["accepted", "rejected"];
+      if (!allowedStatus.includes(status)) {
+        return res
+          .status(400)
+          .json({ message: "Invalid status type : " + status });
+      }
+
+      // requestId is present in db or not
+      const requestIdValid = await ConnectionRequest.findOne({
+        _id: requestId,
+        toUserId: loggedUser._id,
+        status: "interested",
+      });
+      if (!requestIdValid) {
+        throw new Error("The request not exist");
+      }
+
+      await ConnectionRequest.findByIdAndUpdate(requestId, { status: status });
+
+      res.send(`Request has been ${status}`);
+    } catch (err) {
+      res.status(404).send("Error : " + err.message);
     }
   }
 );
