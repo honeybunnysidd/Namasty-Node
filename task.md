@@ -8,12 +8,4 @@
 - app.jsx => remove unnecessary rendering data(default -given by vite)
 - Delete App.css file & assets folder
 
-- Install Tailwind CSS => npm install tailwindcss @tailwindcss/vite
-- Configure the Vite plugin =>
-  import { defineConfig } from 'vite'
-  import tailwindcss from '@tailwindcss/vite'
-  export default defineConfig({
-  plugins: [
-  tailwindcss(),
-  ],
-  })
+- Install Tailwind CSS => npm install -D tailwindcss postcss autoprefixer
