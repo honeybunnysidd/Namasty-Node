@@ -61,4 +61,40 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
   }
 });
 
+//Feed API for the logged in user
+userRouter.get("/feed", userAuth, async (req, res) => {
+  try {
+    const loggedUser = req.user;
+
+    const page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+
+    limit = limit > 50 ? 50 : limit;
+
+    const connectionRequest = await ConnectionRequest.find({
+      $or: [{ fromUserId: loggedUser._id }, { toUserId: loggedUser._id }],
+    }).select("fromUserId toUserId");
+
+    const hiddenUser = new Set();
+    connectionRequest.forEach((el) => {
+      hiddenUser.add(el.fromUserId.toString());
+      hiddenUser.add(el.toUserId.toString());
+    });
+
+    const users = await User.find({
+      $and: [
+        { _id: { $nin: Array.from(hiddenUser) } },
+        { _id: { $ne: loggedUser._id } },
+      ],
+    })
+      .select(USER_POPULATE_DATA)
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.send(users);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 module.exports = userRouter;
