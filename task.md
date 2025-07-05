@@ -4,13 +4,11 @@
 
 Lecture 1 :
 
-- Create (build tool) Vite + React project => npm create vite@latest
-- install all the dependency => npm i
-- start the project => npm run dev
-- app.jsx => remove unnecessary rendering data(default given by vite)
-- Delete App.css file & assets folder
+- Create (build tool) Vite + React project with taillwind
+  [https://tailwindcss.com/docs/installation/using-vite](Vite + React with tailwind)
 
-- Install Tailwind CSS :
-  npm install -D tailwindcss postcss autoprefixer
-  npm install -D tailwindcss@3.4.3
-  npx tailwindcss init -p
+- Install daisy UI
+  npm i -D daisyui@latest
+  add index.css => @plugin "daisyui";
+
+-
