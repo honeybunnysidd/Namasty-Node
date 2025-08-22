@@ -1,9 +1,27 @@
+import { BrowserRouter, Routes, Route } from "react-router";
+import Body from "./components/Body";
+import Login from "./components/login";
+import PageNotFound from "./components/PageNotFound";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
+import Feed from "./components/Feed";
+
 function App() {
-  return (
-    <>
-      <h1 className="text-3xl font-bold">Jack Nibba</h1>
-    </>
-  );
+	return (
+		<>
+			<Provider store={appStore}>
+				<BrowserRouter basename="/">
+					<Routes>
+						<Route path="/" element={<Body />}>
+							<Route path="/" element={<Feed />}></Route>
+							<Route path="/login" element={<Login />}></Route>
+							<Route path="*" element={<PageNotFound />}></Route>
+						</Route>
+					</Routes>
+				</BrowserRouter>
+			</Provider>
+		</>
+	);
 }
 
 export default App;
