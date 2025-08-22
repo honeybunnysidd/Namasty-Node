@@ -8,11 +8,11 @@ const userSlice = createSlice({
 		addUser: (state, action) => {
 			return action.payload;
 		},
-		removerUSer: (state, action) => {
+		removerUser: (state, action) => {
 			return null;
 		},
 	},
 });
 
-export const { addUser, removerUSer } = userSlice.actions;
+export const { addUser, removerUser } = userSlice.actions;
 export default userSlice.reducer;
