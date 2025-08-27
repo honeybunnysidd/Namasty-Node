@@ -24,9 +24,9 @@ export default function Navbar() {
 	return (
 		<div className="navbar bg-base-300 shadow-sm">
 			<div className="flex-1">
-				<Link to="/" className="btn btn-ghost text-xl">
+				<a href="/" className="btn btn-ghost text-xl">
 					🖥️DevMate
-				</Link>
+				</a>
 			</div>
 			<div className="flex gap-2">
 				{user && (
@@ -60,8 +60,14 @@ export default function Navbar() {
 									</Link>
 								</li>
 								<li>
-									<Link>Settings</Link>
+									<Link to={"/requests"}>
+										Pending Request
+									</Link>
 								</li>
+								<li>
+									<Link to={"/connections"}>Connections</Link>
+								</li>
+
 								<li>
 									<a onClick={handleLogout}>Logout</a>
 								</li>
