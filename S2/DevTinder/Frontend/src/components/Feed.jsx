@@ -23,13 +23,12 @@ const Feed = () => {
 	useEffect(() => {
 		getFeed();
 	}, []);
-
-	return (
-		feed && (
-			<div className="allCard flex flex-wrap justify-center my-10">
-				<UserCard user={feed[0] || ""} />
-			</div>
-		)
+	return feed && feed.length > 0 ? (
+		<div className=" flex justify-center">
+			<UserCard user={feed[0]} />
+		</div>
+	) : (
+		<h2 className="text-center font-bold py-5">No More Feed</h2>
 	);
 };
 

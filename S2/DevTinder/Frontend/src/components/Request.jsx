@@ -67,7 +67,7 @@ const Requests = () => {
 								<img
 									src={photoUrl}
 									alt="img"
-									className="size-9 rounded-2xl"
+									className="size-12 rounded-2xl object-contain"
 								/>
 								<p>
 									{firstName} {lastName}{" "}

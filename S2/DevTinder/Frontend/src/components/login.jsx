@@ -6,9 +6,18 @@ import { useNavigate } from "react-router";
 import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
-	const [emailId, setEmailId] = useState("honey@gmail.com");
-	const [password, setPassword] = useState("Honey123@");
+	const [emailId, setEmailId] = useState("");
+	const [password, setPassword] = useState("");
+
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [age, setAge] = useState("");
+	const [gender, setGender] = useState("");
+	const [about, setAbout] = useState("");
+
 	const [error, setError] = useState("");
+
+	const [isLoginForm, setIsLoginForm] = useState(true);
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -32,13 +41,117 @@ const Login = () => {
 		}
 	};
 
+	const handleSignUp = async () => {
+		try {
+			const res = await axios.post(
+				BASE_URL + "/signup",
+				{
+					firstName,
+					lastName,
+					gender,
+					age,
+					emailId,
+					password,
+					about,
+				},
+				{ withCredentials: true }
+			);
+
+			dispatch(addUser(res.data.data));
+			setIsLoginForm(true);
+			setEmailId("");
+			setPassword("");
+			setError(null);
+
+			return;
+		} catch (err) {
+			console.log(err);
+			setError(err?.response?.data || "Something went wrong");
+		}
+	};
+
 	return (
 		<div className="flex items-center justify-center py-10">
 			<div className="card w-96 bg-base-300 shadow-lg rounded-4xl p-5">
 				<div className="card-body ">
 					<h2 className="card-title justify-center mb-4">
-						Login Page
+						{isLoginForm ? "Login Page" : "Sign up"}
 					</h2>
+
+					{!isLoginForm && (
+						<>
+							<div className="form-control">
+								<label className="input flex items-center gap-2">
+									<input
+										type="text"
+										placeholder="First Name"
+										required
+										pattern="[A-Za-z][A-Za-z0-9\-]*"
+										className="grow"
+										value={firstName}
+										onChange={(e) =>
+											setFirstName(e.target.value)
+										}
+									/>
+								</label>
+							</div>
+
+							<div className="form-control mt-3">
+								<label className="input flex items-center gap-2">
+									<input
+										type="text"
+										placeholder="Last Name"
+										required
+										className="grow"
+										value={lastName}
+										onChange={(e) =>
+											setLastName(e.target.value)
+										}
+									/>
+								</label>
+							</div>
+
+							<div className="form-control mt-3">
+								<label className="input flex items-center gap-2">
+									<input
+										type="text"
+										placeholder="Age"
+										required
+										className="grow"
+										value={age}
+										onChange={(e) => setAge(e.target.value)}
+									/>
+								</label>
+							</div>
+
+							<div className="form-control mt-3">
+								<label htmlFor="about" className="flex mb-1">
+									About:
+								</label>
+								<textarea
+									name="about"
+									id="about"
+									className="textarea textarea-bordered"
+									value={about}
+									onChange={(e) => setAbout(e.target.value)}
+								></textarea>
+							</div>
+
+							<div className="form-control mt-3">
+								<select
+									value={gender}
+									onChange={(e) => setGender(e.target.value)}
+									className="select select-info border-none"
+								>
+									<option value="" disabled>
+										Select your Gender
+									</option>
+									<option value="male">Male</option>
+									<option value="female">Female</option>
+								</select>
+							</div>
+						</>
+					)}
 
 					<div className="form-control">
 						<label className="input flex items-center gap-2">
@@ -54,7 +167,7 @@ const Login = () => {
 							</svg>
 							<input
 								type="text"
-								placeholder="Username"
+								placeholder="Email"
 								required
 								pattern="[A-Za-z][A-Za-z0-9\-]*"
 								className="grow"
@@ -108,11 +221,22 @@ const Login = () => {
 					<div className="card-actions justify-center mt-3">
 						<button
 							className="btn btn-primary w-full"
-							onClick={handleLogin}
+							onClick={isLoginForm ? handleLogin : handleSignUp}
 						>
-							Login
+							{isLoginForm ? "Login" : "Signup"}
 						</button>
 					</div>
+					<p
+						className=" text-center mt-3 cursor-pointer hover:underline"
+						onClick={() => {
+							setIsLoginForm((value) => !value);
+							setError("");
+						}}
+					>
+						{isLoginForm
+							? "New user, SignUp"
+							: "Already a  user, Please Login"}
+					</p>
 				</div>
 			</div>
 		</div>

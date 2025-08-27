@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
 		},
 		about: {
 			type: String,
-			maxLength: 100,
+			maxLength: 500,
 		},
 		skills: {
 			type: [String],
@@ -52,6 +52,8 @@ const userSchema = new mongoose.Schema(
 		},
 		photoUrl: {
 			type: String,
+			default:
+				"https://static.vecteezy.com/system/resources/previews/019/879/186/original/user-icon-on-transparent-background-free-png.png",
 			validate(value) {
 				if (!validator.isURL(value)) {
 					throw new Error("Invalid Photo Url");
